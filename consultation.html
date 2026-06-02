@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book a Consultation | Deep Dive Consulting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body class="consultation-page">
+  <div class="page-bg"></div>
+  <header class="site-header scrolled">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html" aria-label="Deep Dive Consulting home">
+        <img src="Deep%20dive%20logo_final_white.png" alt="Deep Dive Consulting logo" />
+      </a>
+      <a class="btn btn-outline consultation-header-link" href="index.html">Back to Home</a>
+    </div>
+  </header>
+
+  <main class="consultation-main section-space">
+    <section class="container consultation-wrap reveal visible">
+      <p class="section-label">Consultation form</p>
+      <h1 class="consultation-title">Book a consultation</h1>
+      <p class="consultation-subtext">
+      Share your details and our team will connect with you to plan your Swiggy and Zomato growth strategy.
+    </p>
+
+      <form class="consultation-form" id="consultationForm" novalidate>
+        <div class="consultation-grid">
+          <div class="consultation-field">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required />
+          <p class="field-error" id="nameError" aria-live="polite"></p>
+        </div>
+          <div class="consultation-field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required />
+          <p class="field-error" id="emailError" aria-live="polite"></p>
+        </div>
+          <div class="consultation-field">
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel" required />
+          <p class="field-error" id="phoneError" aria-live="polite"></p>
+        </div>
+          <div class="consultation-field">
+          <label for="restaurant">Restaurant Name</label>
+          <input id="restaurant" name="restaurant" type="text" required />
+          <p class="field-error" id="restaurantError" aria-live="polite"></p>
+        </div>
+          <div class="consultation-field">
+          <label for="city">City</label>
+          <input id="city" name="city" type="text" required />
+          <p class="field-error" id="cityError" aria-live="polite"></p>
+        </div>
+          <div class="consultation-field">
+          <label for="platform">Current Role</label>
+          <input id="platform" name="platform" type="text" placeholder="Owner / Manager / Marketing" required />
+          <p class="field-error" id="platformError" aria-live="polite"></p>
+        </div>
+          <div class="consultation-field">
+          <label for="experience">Years of Experience</label>
+          <input id="experience" name="experience" type="number" min="0" step="0.5" required />
+          <p class="field-error" id="experienceError" aria-live="polite"></p>
+        </div>
+          <div class="consultation-field">
+          <label for="orders">Monthly Orders (Approx)</label>
+          <input id="orders" name="orders" type="number" min="1" required />
+          <p class="field-error" id="ordersError" aria-live="polite"></p>
+        </div>
+          <div class="consultation-field full">
+          <label for="message">Message</label>
+          <textarea id="message" name="message"
+            placeholder="Tell us a bit about your brand and your current growth goals." required></textarea>
+          <p class="field-error" id="messageError" aria-live="polite"></p>
+        </div>
+        </div>
+        <div class="consultation-actions">
+          <button class="btn consultation-submit" type="submit">Submit</button>
+          <a class="consultation-link" href="index.html">Back to website</a>
+        </div>
+      </form>
+      <p class="form-status" id="formStatus" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <div class="success-modal" id="successModal" role="alertdialog" aria-modal="true" aria-labelledby="successTitle">
+    <div class="success-modal-card">
+      <p class="section-label">Form submitted</p>
+      <h2 id="successTitle">Thank you! Consultation request received.</h2>
+      <p>Redirecting you to the homepage...</p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const form = document.getElementById("consultationForm");
+      const formStatus = document.getElementById("formStatus");
+      const successModal = document.getElementById("successModal");
+      const fields = [
+        "name",
+        "email",
+        "phone",
+        "restaurant",
+        "city",
+        "platform",
+        "experience",
+        "orders",
+        "message"
+      ];
+
+      function getTrimmedValue(fieldId) {
+        return document.getElementById(fieldId).value.trim();
+      }
+
+      function setFieldError(fieldId, message) {
+        const input = document.getElementById(fieldId);
+        const error = document.getElementById(fieldId + "Error");
+
+        input.classList.toggle("has-error", Boolean(message));
+        input.setAttribute("aria-invalid", message ? "true" : "false");
+        error.textContent = message || "";
+      }
+
+      function validateField(fieldId) {
+        const value = getTrimmedValue(fieldId);
+
+        if (!value) {
+          return "This field is required.";
+        }
+
+        if (fieldId === "email") {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value)) {
+            return "Please enter a valid email address.";
+          }
+        }
+
+        if (fieldId === "phone") {
+          const cleanPhone = value.replace(/\s+/g, "");
+          const phoneRegex = /^[+]?[0-9]{10,15}$/;
+          if (!phoneRegex.test(cleanPhone)) {
+            return "Enter a valid phone number (10-15 digits).";
+          }
+        }
+
+        if (fieldId === "experience") {
+          const years = Number(value);
+          if (Number.isNaN(years) || years < 0) {
+            return "Years of experience must be 0 or more.";
+          }
+        }
+
+        if (fieldId === "orders") {
+          const orders = Number(value);
+          if (Number.isNaN(orders) || orders < 1) {
+            return "Monthly orders must be at least 1.";
+          }
+        }
+
+        if (fieldId === "message" && value.length < 20) {
+          return "Message should be at least 20 characters.";
+        }
+
+        return "";
+      }
+
+      fields.forEach((fieldId) => {
+        const input = document.getElementById(fieldId);
+        input.addEventListener("input", () => {
+          setFieldError(fieldId, validateField(fieldId));
+        });
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        let hasErrors = false;
+
+        fields.forEach((fieldId) => {
+          const errorMessage = validateField(fieldId);
+          setFieldError(fieldId, errorMessage);
+          if (errorMessage) {
+            hasErrors = true;
+          }
+        });
+
+        if (hasErrors) {
+          formStatus.textContent = "Please fix the highlighted fields before submitting.";
+          return;
+        }
+
+        formStatus.textContent = "";
+        successModal.classList.add("open");
+        window.setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1800);
+      });
+    })();
+  </script>
+</body>
+
+</html>

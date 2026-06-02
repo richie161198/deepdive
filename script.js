@@ -134,3 +134,51 @@ const footerYear = document.getElementById("footer-year");
 if (footerYear) {
   footerYear.textContent = String(new Date().getFullYear());
 }
+
+const reviewSlides = [...document.querySelectorAll(".review-slide")];
+const reviewDots = [...document.querySelectorAll(".review-dot")];
+const reviewPrev = document.querySelector(".review-prev");
+const reviewNext = document.querySelector(".review-next");
+let reviewCurrent = 0;
+let reviewTimer;
+
+function showReview(index) {
+  reviewSlides.forEach((slide, idx) => slide.classList.toggle("active", idx === index));
+  reviewDots.forEach((dot, idx) => dot.classList.toggle("active", idx === index));
+}
+
+function goToReview(index) {
+  reviewCurrent = (index + reviewSlides.length) % reviewSlides.length;
+  showReview(reviewCurrent);
+}
+
+function resetReviewTimer() {
+  if (!reviewSlides.length) return;
+  window.clearInterval(reviewTimer);
+  reviewTimer = window.setInterval(() => {
+    goToReview(reviewCurrent + 1);
+  }, 5000);
+}
+
+if (reviewSlides.length) {
+  showReview(reviewCurrent);
+
+  reviewPrev?.addEventListener("click", () => {
+    goToReview(reviewCurrent - 1);
+    resetReviewTimer();
+  });
+
+  reviewNext?.addEventListener("click", () => {
+    goToReview(reviewCurrent + 1);
+    resetReviewTimer();
+  });
+
+  reviewDots.forEach((dot, index) => {
+    dot.addEventListener("click", () => {
+      goToReview(index);
+      resetReviewTimer();
+    });
+  });
+
+  resetReviewTimer();
+}
