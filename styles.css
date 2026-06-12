@@ -61,7 +61,7 @@ body {
 }
 
 .nav-wrap {
-  min-height: 76px;
+  min-height: 84px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -88,9 +88,9 @@ body {
 
 .brand img {
   display: block;
-  height: 46px;
+  height: 58px;
   width: auto;
-  max-width: min(220px, 42vw);
+  max-width: min(280px, 48vw);
 }
 
 .main-nav {
@@ -264,7 +264,6 @@ h2.section-title {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-.feature-card,
 .chef {
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: linear-gradient(160deg, #121212, #0d0d0d);
@@ -272,7 +271,6 @@ h2.section-title {
   transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
-.feature-card:hover,
 .chef:hover {
   transform: translateY(-6px);
   border-color: var(--line);
@@ -292,6 +290,8 @@ h2.section-title {
 
 .feature-card {
   min-height: 340px;
+  padding: 2rem;
+  border: none;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -300,6 +300,11 @@ h2.section-title {
   background: var(--image-src) center/cover no-repeat;
   position: relative;
   overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
 }
 
 .feature-card::before {
