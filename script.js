@@ -75,8 +75,15 @@ if (window.gsap && window.ScrollTrigger && parallaxItems.length) {
   gsap.registerPlugin(ScrollTrigger);
 
   parallaxItems.forEach((item) => {
+    if (item.closest(".hero")) {
+      item.style.setProperty("--parallax-offset", "0px");
+      return;
+    }
+
     const speed = Number(item.dataset.speed || 0.15);
-    const travel = 220 * (0.6 + speed * 3);
+    const isFeatureCard = item.classList.contains("feature-card");
+    const baseTravel = isFeatureCard ? 70 : 220;
+    const travel = baseTravel * (0.6 + speed * 3);
     const state = { offset: -travel };
 
     gsap.to(state, {
@@ -104,13 +111,20 @@ if (window.gsap && window.ScrollTrigger && parallaxItems.length) {
     const viewportCenter = window.innerHeight / 2;
 
     parallaxItems.forEach((item) => {
+      if (item.closest(".hero")) {
+        item.style.setProperty("--parallax-offset", "0px");
+        return;
+      }
+
       const speed = Number(item.dataset.speed || 0.15) * PARALLAX_SPEED_MULTIPLIER;
+      const isFeatureCard = item.classList.contains("feature-card");
+      const maxOffset = isFeatureCard ? 70 : PARALLAX_MAX_OFFSET;
       const rect = item.getBoundingClientRect();
       const elementCenter = rect.top + rect.height / 2;
       const distance = elementCenter - viewportCenter;
       const offset = Math.max(
-        -PARALLAX_MAX_OFFSET,
-        Math.min(PARALLAX_MAX_OFFSET, -distance * speed)
+        -maxOffset,
+        Math.min(maxOffset, -distance * speed)
       );
       item.style.setProperty("--parallax-offset", `${offset.toFixed(2)}px`);
     });
