@@ -1196,7 +1196,15 @@ h2.section-title {
     width: min(240px, 70vw);
     transform: none;
   }
-
+  /* .difference-logod {
+  height: 0px;
+  width: auto;
+} */
+/* .difference-logo img {
+  width: 80px;
+  height: auto;
+  transform: none;
+} */
   .about-media {
     grid-template-columns: 1fr 1fr;
   }
